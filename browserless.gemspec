@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "debug", "~> 1.7.2"
   spec.add_development_dependency "standard", "~> 1.26.0"
 
-  # spec.add_dependency "httpary", "~> 0.18"
+  spec.add_dependency "httparty", ">= 0.18"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
