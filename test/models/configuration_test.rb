@@ -30,6 +30,6 @@ class Browserless::ConfigurationTest < Minitest::Test
   def test_url_with_api_key
     @configuration.api_key = "test_key"
 
-    assert_equal "https://chrome.browserless.io/pdf?token=test_key", @configuration.url
+    assert_equal "https://production-sfo.browserless.io/pdf?token=test_key", @configuration.url
   end
 end

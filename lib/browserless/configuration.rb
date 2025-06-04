@@ -5,12 +5,11 @@ module Browserless
 
   class Configuration
     attr_writer :api_key
-    attr_accessor :options, :emulate_media, :style_tag
-
-    BASE_URL = "https://chrome.browserless.io/pdf?token="
+    attr_accessor :host, :options, :emulate_media, :style_tag
 
     def initialize
       @api_key = nil
+      @host = "production-sfo.browserless.io"
     end
 
     def api_key
@@ -21,7 +20,7 @@ module Browserless
     end
 
     def url
-      "#{BASE_URL}#{api_key}"
+      "https://#{host}/pdf?token=#{api_key}"
     end
   end
 end
