@@ -91,6 +91,8 @@ pdf_data = client.to_pdf
 
 You can customize the PDF generation by passing options. Passed in options will overwrite options set in the intializer.
 
+See: https://docs.browserless.io/open-api#tag/Browser-REST-APIs/paths/~1chrome~1pdf/post for the full list. 
+
 ```rb
 client = Browserless::Client.new(
   html: "<html>...</html>", 
