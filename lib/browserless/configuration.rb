@@ -5,7 +5,7 @@ module Browserless
 
   class Configuration
     attr_writer :api_key
-    attr_accessor :host, :options, :emulate_media, :style_tag
+    attr_accessor :host, :options, :emulate_media_type, :style_tag
 
     def initialize
       @api_key = nil

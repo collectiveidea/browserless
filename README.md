@@ -35,7 +35,7 @@ Add your Browserless.io API key in an initializer file, like `config/browserless
 ```rb
 Browserless.configure do |config|
   config.api_key = "your_api_key_here"
-  config.emulate_media = "print" # choose between print or screen (default)
+  config.emulate_media_type = "print" # choose between print or screen (default)
   config.style_tag = File.read(Rails.root.join("app/assets/builds/application.css")) # Pass public asset URL or CSS string content  
   config.options = {
     landscape: false # default
@@ -57,8 +57,8 @@ end
 __api_key__
 Make sure to replace `"your_api_key_here"` with your actual Browserless.io API key.
 
-__emulate_media__
-You can specify the media type by passing in the optional `emulate_media` keyword argument. Choose between `screen` (default) or `print`. 
+__emulate_media_type__
+You can specify the media type by passing in the optional `emulate_media_type` keyword argument. Choose between `screen` (default) or `print`. 
 
 >TailwindCSS supports the [print modifier](https://tailwindcss.com/docs/hover-focus-and-other-states#print-styles), so you can conditional add styles to only be displayed with the PDF is being generated.
 

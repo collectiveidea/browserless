@@ -23,7 +23,7 @@ class Browserless::ClientTest < Minitest::Test
     client = Browserless::Client.new(html: "<html></html>")
 
     assert_equal "<html></html>", client.html
-    assert_equal "screen", client.emulate_media
+    assert_equal "screen", client.emulate_media_type
     assert_equal({content: nil}, client.style_tag)
     assert_equal Browserless.configuration.url, client.url
   end
@@ -50,12 +50,12 @@ class Browserless::ClientTest < Minitest::Test
 
     client = Browserless::Client.new(
       html: "<html></html>",
-      emulate_media: "print",
+      emulate_media_type: "print",
       options: {display_header_footer: true}
     )
 
     assert_equal "<html></html>", client.html
-    assert_equal "print", client.emulate_media
+    assert_equal "print", client.emulate_media_type
     assert_equal({
       landscape: false,
       displayHeaderFooter: true,

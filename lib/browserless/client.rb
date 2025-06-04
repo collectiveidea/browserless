@@ -7,13 +7,14 @@ module Browserless
   class ApikeyError < StandardError; end
 
   class Client
-    attr_reader :html, :url, :style_tag, :emulate_media, :options
+    attr_reader :html, :url, :style_tag, :emulate_media_type, :goto_options, :options
 
     def initialize(html:, options: {}, **kwargs)
       @html = html
       @options = Options.new(**options).to_h
       @style_tag = StyleTag.new(kwargs[:style_tag]).to_h
-      @emulate_media = config_value(:emulate_media, kwargs[:emulate_media]) || "screen"
+      @emulate_media_type = config_value(:emulate_media_type, kwargs[:emulate_media_type]) || "screen"
+      @goto_options = kwargs[:goto_options] || {waitUntil: "networkidle2"}
       @url = Browserless.configuration.url
     end
 
@@ -58,17 +59,11 @@ module Browserless
     def browserless_options
       {
         html: html,
-        safeMode: safe_mode,
-        emulateMedia: emulate_media,
+        emulateMediaType: emulate_media_type,
         addStyleTag: [style_tag],
+        gotoOptions: @goto_options,
         options: options
       }
-    end
-
-    def safe_mode
-      # Longer pages can crash trigger a "Page Crashed!" error. Safemode on by default.
-      # https://www.browserless.io/docs/pdf
-      true
     end
 
     def config_value(key, value)
