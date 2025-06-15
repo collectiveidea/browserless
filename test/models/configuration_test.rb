@@ -20,7 +20,7 @@ class Browserless::ConfigurationTest < Minitest::Test
   end
 
   def test_options_accessor
-    example_options = {display_header_footer: true, landscape: false}
+    example_options = {displayHeaderFooter: true, landscape: false}
 
     @configuration.options = example_options
 

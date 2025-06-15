@@ -22,10 +22,9 @@ class Browserless::ClientTest < Minitest::Test
   def test_initialize
     client = Browserless::Client.new(html: "<html></html>")
 
-    assert_equal "<html></html>", client.html
-    assert_equal "screen", client.emulate_media_type
-    assert_equal({content: nil}, client.style_tag)
-    assert_equal Browserless.configuration.url, client.url
+    assert_equal "<html></html>", client.body_parameters[:html]
+    assert_equal "screen", client.body_parameters[:emulateMediaType]
+    assert_nil(client.body_parameters[:addStyleTag])
   end
 
   def test_existing_browserless_api_key
@@ -36,10 +35,10 @@ class Browserless::ClientTest < Minitest::Test
     end
   end
 
-  def test_initialize_with_style_tag
-    client = Browserless::Client.new(html: "<html></html>", style_tag: "body { font-family: Arial; }")
+  def test_initialize_with_add_style_tag
+    client = Browserless::Client.new(html: "<html></html>", addStyleTag: ["<style>body { font-family: Arial; }</style>"])
 
-    assert_equal({content: "body { font-family: Arial; }"}, client.style_tag)
+    assert_equal(["<style>body { font-family: Arial; }</style>"], client.body_parameters[:addStyleTag])
   end
 
   def test_initialize_with_custom_options
@@ -50,20 +49,14 @@ class Browserless::ClientTest < Minitest::Test
 
     client = Browserless::Client.new(
       html: "<html></html>",
-      emulate_media_type: "print",
-      options: {display_header_footer: true}
+      emulateMediaType: "print",
+      options: {displayHeaderFooter: true}
     )
 
-    assert_equal "<html></html>", client.html
-    assert_equal "print", client.emulate_media_type
+    assert_equal "<html></html>", client.body_parameters[:html]
+    assert_equal "print", client.body_parameters[:emulateMediaType]
     assert_equal({
-      landscape: false,
-      displayHeaderFooter: true,
-      printBackground: false,
-      margin: {},
-      format: "A4",
-      headerTemplate: "<div></div>",
-      footerTemplate: "<div style='font-size: 11px; margin-left: 40px; font: Helvetica'><span class='pageNumber'></span> of <span class='totalPages'></span></div>"
-    }, client.options)
+      displayHeaderFooter: true
+    }, client.body_parameters[:options])
   end
 end

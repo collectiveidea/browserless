@@ -32,18 +32,20 @@ Or install it yourself as:
 ## Configuration
 Add your Browserless.io API key in an initializer file, like `config/browserless.rb`. You can set default configuration options in the initializer.
 
+See: https://docs.browserless.io/open-api#tag/Browser-REST-APIs/paths/~1chrome~1pdf/post for the list of available parameters.
+
 ```rb
 Browserless.configure do |config|
   config.api_key = "your_api_key_here"
-  config.emulate_media_type = "print" # choose between print or screen (default)
-  config.style_tag = File.read(Rails.root.join("app/assets/builds/application.css")) # Pass public asset URL or CSS string content  
+  config.emulateMediaType = "print" # choose between print or screen (default)
+  config.addStyleTag = [{content: File.read(Rails.root.join("app/assets/builds/application.css")})] # Pass public asset :url or CSS string :content in an array of hashes
   config.options = {
     landscape: false # default
-    print_background: false,
+    printPackground: false,
     format: "A4" # default https://pptr.dev/api/puppeteer.paperformat#remarks
-    display_header_footer: false, # default 
-    header_template: "<div>...</div>", # ensure display_header_footer is true
-    footer_template: "<div>...</div>", # ensure display_header_footer is true
+    displayHeaderFooter: false, # default 
+    headerTemplate: "<div>...</div>", # ensure display_header_footer is true
+    footerTemplate: "<div>...</div>", # ensure display_header_footer is true
     margin: {
       top: "2cm",
       left: "0.5cm",
@@ -57,26 +59,26 @@ end
 __api_key__
 Make sure to replace `"your_api_key_here"` with your actual Browserless.io API key.
 
-__emulate_media_type__
-You can specify the media type by passing in the optional `emulate_media_type` keyword argument. Choose between `screen` (default) or `print`. 
+__emulateMediaType__
+You can specify the media type by passing in the optional `emulateMediaType` keyword argument. Choose between `screen` (default) or `print`. 
 
 >TailwindCSS supports the [print modifier](https://tailwindcss.com/docs/hover-focus-and-other-states#print-styles), so you can conditional add styles to only be displayed with the PDF is being generated.
 
-__style_tag__
-You can use both a public URL or pass the CSS as a string to add CSS to your PDF. Note that browserless can't asses any url refering to your local environment. Therefore, in your local environment pass the CSS as a string.
+__addStyleTag__
+You can use both a public URL or pass the CSS as a string to add CSS to your PDF. Note that browserless can't asses any url refering to your local environment. Therefore, in your local environment pass the CSS as a string or specifiy a publicly-routable URL.
 
 ```rb
 def css_asset
   if Rails.env.production?
-    ActionController::Base.helpers.asset_path("application.css")
+    {url: ActionController::Base.helpers.asset_path("application.css")}
   else
-    File.read(Rails.root.join("app/assets/builds/application.css"))
+    {content: File.read(Rails.root.join("app/assets/builds/application.css"))}
   end
 end
 
 Browserless.configure do |config|
   # ... 
-  config.style_tag = css_asset
+  config.addStyleTag = [css_asset]
 end
 ```
 
@@ -89,17 +91,17 @@ client = Browserless::Client.new(html: "<html></html>")
 pdf_data = client.to_pdf
 ```
 
-You can customize the PDF generation by passing options. Passed in options will overwrite options set in the intializer.
+You can customize the PDF generation by passing parameters. ***Note:*** Passing in `:options` will overwrite `options` set in `Browserless.configure`, not add to them.
 
 See: https://docs.browserless.io/open-api#tag/Browser-REST-APIs/paths/~1chrome~1pdf/post for the full list. 
 
 ```rb
 client = Browserless::Client.new(
   html: "<html>...</html>", 
-  emulate_media: "print",
+  emulateMediaType: "print",
   options: {
     landscape: true
-    display_header_footer: true
+    displayHeaderFooter: true
     }
   )
 pdf_data = client.to_pdf
