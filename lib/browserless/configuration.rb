@@ -5,11 +5,13 @@ module Browserless
 
   class Configuration
     attr_writer :api_key
-    attr_accessor :host, :defaults
+    attr_accessor :host, :logger, :debug, :defaults
 
     def initialize
       @api_key = nil
-      @host = "production-sfo.browserless.io"
+      @host = "https://production-sfo.browserless.io"
+      @logger = Logger.new($stdout)
+      @debug = false
       @defaults = {
         emulateMediaType: "screen",
         gotoOptions: {waitUntil: "networkidle2"},
@@ -27,10 +29,6 @@ module Browserless
 
       error = "Api key missing. Check if you have defined an api key in the config/browserless.rb file."
       raise ConfigurationError, error
-    end
-
-    def url
-      "https://#{host}/pdf?token=#{api_key}"
     end
 
     # Shortcuts for accessing options key in the body parameters

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module Browserless
-  class ApikeyError < StandardError; end
-
   class Client
     attr_reader :body_parameters
 
@@ -26,34 +24,21 @@ module Browserless
       File.open(temp_file, "wb") do |file|
         file.binmode
 
-        HTTParty.post(Browserless.configuration.url, headers: Browserless::Client.headers, body: body_parameters.to_json, stream_body: true) do |fragment|
-          handle_fragment(fragment, file)
+        conn = Faraday.new(Browserless.configuration.host) do |builder|
+          builder.request :json
+          builder.response :raise_error
+          builder.response :logger, Browserless.configuration.logger,
+            {headers: true, bodies: Browserless.configuration.debug, errors: true}
         end
-      end
-    end
 
-    def handle_fragment(fragment, file)
-      case fragment.code
-      when 401
-        error = ApikeyError.new("Unauthorized. Please check if you have a valid Browserless API key")
-        raise error
-      when 301, 302
-        print "skip writing for redirect"
-      when 200
-        print "."
-        file.write(fragment)
-      else
-        puts fragment
-        raise StandardError, "Non-success status code while streaming #{fragment.code}"
-      end
-    end
+        data = body_parameters.merge(api_key: Browserless.configuration.api_key)
 
-    class << self
-      def headers
-        {
-          "Cache-Control": "no-cache",
-          "Content-Type": "application/json"
-        }
+        conn.post("/pdf", data) do |f|
+          f.options.on_data = proc do |fragment, overall_received_bytes|
+            print "." if Browserless.configuration.debug
+            file.write(fragment)
+          end
+        end
       end
     end
   end

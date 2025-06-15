@@ -11,14 +11,6 @@ class Browserless::ClientTest < Minitest::Test
     Browserless.configure { nil }
   end
 
-  def test_headers
-    expected_headers = {
-      "Cache-Control": "no-cache",
-      "Content-Type": "application/json"
-    }
-    assert_equal expected_headers, Browserless::Client.headers
-  end
-
   def test_initialize
     client = Browserless::Client.new(html: "<html></html>")
 

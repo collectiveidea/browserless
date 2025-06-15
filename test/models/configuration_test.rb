@@ -27,9 +27,7 @@ class Browserless::ConfigurationTest < Minitest::Test
     assert_equal example_options, @configuration.options
   end
 
-  def test_url_with_api_key
-    @configuration.api_key = "test_key"
-
-    assert_equal "https://production-sfo.browserless.io/pdf?token=test_key", @configuration.url
+  def test_host
+    assert_equal "https://production-sfo.browserless.io", @configuration.host
   end
 end
