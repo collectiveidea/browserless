@@ -31,10 +31,8 @@ module Browserless
             {headers: true, bodies: Browserless.configuration.debug, errors: true}
         end
 
-        data = body_parameters.merge(api_key: Browserless.configuration.api_key)
-
-        conn.post("/pdf", data) do |f|
-          f.options.on_data = proc do |fragment, overall_received_bytes|
+        conn.post("/pdf?token=#{Browserless.configuration.api_key}", body_parameters) do |f|
+          f.options.on_data = proc do |fragment, _overall_received_bytes|
             print "." if Browserless.configuration.debug
             file.write(fragment)
           end
