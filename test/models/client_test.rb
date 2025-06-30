@@ -15,7 +15,6 @@ class Browserless::ClientTest < Minitest::Test
     client = Browserless::Client.new(html: "<html></html>")
 
     assert_equal "<html></html>", client.body_parameters[:html]
-    assert_equal "screen", client.body_parameters[:emulateMediaType]
     assert_nil(client.body_parameters[:addStyleTag])
   end
 

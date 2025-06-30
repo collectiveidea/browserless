@@ -13,7 +13,6 @@ module Browserless
       @logger = Logger.new($stdout)
       @debug = false
       @defaults = {
-        emulateMediaType: "screen",
         gotoOptions: {waitUntil: "networkidle2"},
         options: {
           displayHeaderFooter: false,
