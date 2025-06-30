@@ -8,20 +8,17 @@ module Browserless
       @body_parameters = Browserless.configuration.defaults.merge(kwargs)
     end
 
+    # Returns a string containing the PDF data
     def to_pdf
-      temp_file = Tempfile.new
-      save_pdf_to_temp_file(temp_file)
-
-      temp_file.read
-    ensure
-      temp_file.close
-      temp_file.unlink
+      Tempfile.create do |tempfile|
+        to_pdf_file(tempfile)
+        return tempfile.read
+      end
     end
 
-    private
-
-    def save_pdf_to_temp_file(temp_file)
-      File.open(temp_file, "wb") do |file|
+    # Returns a File object of the PDF
+    def to_pdf_file(filename)
+      File.open(filename, "wb") do |file|
         file.binmode
 
         conn = Faraday.new(Browserless.configuration.host) do |builder|
