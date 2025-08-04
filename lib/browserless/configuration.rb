@@ -5,20 +5,20 @@ module Browserless
 
   class Configuration
     attr_writer :api_key
-    attr_accessor :host, :logger, :debug, :defaults
+    attr_accessor :host, :logger, :debug
 
     def initialize
       @api_key = nil
       @host = "https://production-sfo.browserless.io"
       @logger = Logger.new($stdout)
       @debug = false
-      @defaults = {
+      @body_parameters = {
         gotoOptions: {waitUntil: "networkidle2"},
         options: {
           displayHeaderFooter: false,
           format: "A4",
           landscape: false,
-          print_background: false
+          printBackground: false
         }
       }
     end
@@ -32,11 +32,11 @@ module Browserless
 
     # Shortcuts for accessing options key in the body parameters
     def options
-      defaults[:options]
+      @body_parameters
     end
 
-    def options=(value)
-      defaults[:options] = value
+    def options=(options)
+      @body_parameters.merge!(options)
     end
   end
 end

@@ -38,20 +38,22 @@ See: https://docs.browserless.io/open-api#tag/Browser-REST-APIs/paths/~1chrome~1
 Browserless.configure do |config|
   config.api_key = "your_api_key_here"
   config.emulateMediaType = "print" # choose between print or screen (default)
-  config.addStyleTag = [{content: File.read(Rails.root.join("app/assets/builds/application.css")})] # Pass public asset :url or CSS string :content in an array of hashes
+  config.addStyleTag = [{content: File.read(Rails.root.join("app/assets/builds/application.css"))}] # Pass public asset :url or CSS string :content in an array of hashes
   config.options = {
-    landscape: false # default
-    printPackground: false,
-    format: "A4" # default https://pptr.dev/api/puppeteer.paperformat#remarks
-    displayHeaderFooter: false, # default 
-    headerTemplate: "<div>...</div>", # ensure display_header_footer is true
-    footerTemplate: "<div>...</div>", # ensure display_header_footer is true
-    margin: {
-      top: "2cm",
-      left: "0.5cm",
-      right: "0.5cm",
-      bottom: "2cm"
-    },
+    options = {
+      landscape: false, # default
+      printBackground: false,
+      format: "A4", # default https://pptr.dev/api/puppeteer.paperformat#remarks
+      displayHeaderFooter: false, # default 
+      headerTemplate: "<div>...</div>", # ensure display_header_footer is true
+      footerTemplate: "<div>...</div>", # ensure display_header_footer is true
+      margin: {
+        top: "2cm",
+        left: "0.5cm",
+        right: "0.5cm",
+        bottom: "2cm"
+      },
+    }
   }
 end
 ```
@@ -91,7 +93,7 @@ client = Browserless::Client.new(html: "<html></html>")
 pdf_data = client.to_pdf
 ```
 
-You can customize the PDF generation by passing parameters. ***Note:*** Passing in `:options` will overwrite `options` set in `Browserless.configure`, not add to them.
+You can customize the PDF generation by passing parameters.
 
 See: https://docs.browserless.io/open-api#tag/Browser-REST-APIs/paths/~1chrome~1pdf/post for the full list. 
 

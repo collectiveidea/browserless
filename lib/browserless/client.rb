@@ -5,7 +5,7 @@ module Browserless
     attr_reader :body_parameters
 
     def initialize(**kwargs)
-      @body_parameters = Browserless.configuration.defaults.merge(kwargs)
+      @body_parameters = Browserless.configuration.options.merge(kwargs)
     end
 
     # Returns a string containing the PDF data
